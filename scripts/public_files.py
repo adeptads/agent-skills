@@ -202,6 +202,7 @@ def public_files(name):
         "README.md",
         "LICENSE",
         "assets/banner.svg",
+        "assets/how-it-works.svg",
         "package.json",
         README_TEMPLATE,
         "scripts/build.py",

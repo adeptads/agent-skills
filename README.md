@@ -26,12 +26,9 @@
 
 ## How it works
 
-```mermaid
-flowchart LR
-  A["<b>You ask</b><br>website, goal, budget"] --> B["<b>Agent fills gaps</b><br>one brief to agree"]
-  B --> C["<b>AdeptAds builds</b><br>10 to 20 min, paused"]
-  C --> D(["<b>You say start</b><br>ads go live"])
-```
+<p align="center">
+  <img src="assets/how-it-works.svg" alt="You ask: website, goal, budget. Agent fills gaps: one brief to agree. AdeptAds builds: 10 to 20 minutes, paused. You say start: ads go live." width="100%">
+</p>
 
 > [!IMPORTANT]
 > Campaigns arrive paused. Nothing spends until you say start.
