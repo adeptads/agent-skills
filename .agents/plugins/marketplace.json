@@ -1,0 +1,17 @@
+{
+  "name": "adeptads",
+  "plugins": [
+    {
+      "name": "adeptads-google-ads",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex/adeptads-google-ads"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

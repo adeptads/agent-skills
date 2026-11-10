@@ -1,0 +1,13 @@
+{
+  "name": "adeptads",
+  "description": "🚀 Give your AI agent Google Ads superpowers. Skills and plugins to create and expand campaigns with AdeptAds multi-agent workflows.",
+  "owner": {
+    "name": "AdeptAds"
+  },
+  "plugins": [
+    {
+      "name": "adeptads-google-ads",
+      "source": "./plugins/claude/adeptads-google-ads"
+    }
+  ]
+}

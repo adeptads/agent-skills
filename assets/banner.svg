@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" role="img" aria-labelledby="t">
+  <title id="t">Skip the Google Ads tabs. Just ask. A chat prompt becomes a finished, paused Google Ads campaign.</title>
+  <rect width="1200" height="380" rx="20" fill="#f8fafc"/>
+  <circle cx="1100" cy="30" r="170" fill="#fde6e6"/>
+  <circle cx="110" cy="400" r="120" fill="#f1f5f9"/>
+  <g transform="translate(52 44) scale(0.22)">
+    <path fill="#ed311f" d="M118.9,107.93l-29.07,62.29c-.49,1.05-1.54,1.72-2.7,1.72h-47.24c-2.21,0-3.65-2.33-2.66-4.3l53.73-107.45c1.1-2.19,4.22-2.19,5.32,0l22.58,45.16c.41.81.42,1.77.03,2.59ZM104.05,47.35l41.8-8.36c2.39-.48,4.31,1.97,3.28,4.17l-23.24,49.79c-.63,1.35-2.55,1.38-3.21.04l-20.7-41.41c-.88-1.75.15-3.86,2.08-4.25ZM126.26,120.12l24.62,49.24c.59,1.19-.27,2.58-1.6,2.58h-47.59c-1.31,0-2.17-1.36-1.62-2.54l22.98-49.24c.63-1.35,2.55-1.38,3.21-.04ZM83.68,183.41l-15.16,32.48c-.95,2.04-3.73,2.32-5.08.53l-23.09-30.78c-1.47-1.96-.07-4.76,2.38-4.76h39.32c1.31,0,2.17,1.36,1.62,2.54ZM96.61,180.87h61.02c.46,0,.92.11,1.33.31l53.32,26.66c2.7,1.35,1.91,5.4-1.1,5.63l-131.51,10.12c-2.27.17-3.89-2.16-2.92-4.22l17.16-36.78c.49-1.05,1.54-1.72,2.7-1.72ZM162.27,172.19l-32.21-64.41c-.41-.81-.42-1.77-.03-2.59l26.37-56.51c1.09-2.33,4.42-2.28,5.43.09l64.37,150.19c1.09,2.55-1.59,5.07-4.06,3.83l-58.53-29.27c-.58-.29-1.04-.75-1.33-1.33Z"/>
+  </g>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="118" y="84" font-size="28" fill="#0f172a"><tspan font-weight="700">AdeptAds</tspan><tspan dx="12" font-size="18" fill="#475569">agent skills</tspan></text>
+    <text x="64" y="176" font-weight="800" font-size="48" fill="#0f172a">Skip the Google Ads</text>
+    <text x="64" y="234" font-weight="800" font-size="48" fill="#0f172a">tabs. <tspan fill="#ed311f">Just ask.</tspan></text>
+    <text x="64" y="292" font-size="19" fill="#475569">Your agent brings the brief. AdeptAds builds the campaign.</text>
+    <rect x="730" y="56" width="390" height="84" rx="18" fill="#0f172a"/>
+    <path d="M1088 140l22 22l-2-22z" fill="#0f172a"/>
+    <text x="754" y="92" font-size="18" fill="#ffffff">New Search campaign for my site.</text>
+    <text x="754" y="118" font-size="18" fill="#ffffff">Leads, Austin, $40 a day.</text>
+    <rect x="690" y="184" width="430" height="150" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="716" y="224" font-weight="600" font-size="20" fill="#0f172a">Campaign ready</text>
+    <rect x="1006" y="204" width="90" height="28" rx="14" fill="#fde6e6"/>
+    <text x="1051" y="223" text-anchor="middle" font-size="14" font-weight="600" fill="#ac2c20">paused</text>
+    <text x="716" y="258" font-size="16" fill="#475569">4 ad groups · 38 keywords · 12 ads</text>
+    <rect x="716" y="278" width="130" height="38" rx="10" fill="#ed311f"/>
+    <text x="781" y="303" text-anchor="middle" font-weight="600" font-size="17" fill="#ffffff">Start it?</text>
+  </g>
+</svg>
