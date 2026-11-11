@@ -1,8 +1,10 @@
 {
   "name": "adeptads",
-  "description": "🚀 Give your AI agent Google Ads superpowers. Skills and plugins to create and expand campaigns with AdeptAds multi-agent workflows.",
+  "description": "Build and grow Google Ads",
   "owner": {
-    "name": "AdeptAds"
+    "name": "AdeptAds",
+    "email": "contact@adeptads.ai",
+    "url": "https://www.adeptads.ai/"
   },
   "plugins": [
     {

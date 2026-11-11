@@ -84,6 +84,7 @@ For a broad goal such as "get more leads", read campaign evidence first and lay 
 
 - When creation starts, say it usually takes 10 to 20 minutes.
 - Poll `get_task_status` with `wait_seconds` 30 until the task reaches a terminal state. It returns early when the step changes or the task ends, so call again right away while `ready` is false. Report `progress.last_completed_step` and its step number when they change. After about 30 minutes without a terminal state, stop, give the `task_id`, and offer to check again. Report only observed states and steps, never invented stages or percentages.
+- Match creation results using the task's returned `campaign_id`, not a matching name, brief or timestamp in `list_campaigns`; leave campaigns without that link unattributed.
 - Act on each state as listed in [task states](references/tools.md#task-states).
 - At `PENDING_APPROVAL`, show the trusted review link and stop polling until the operator says they decided. There is no MCP approval tool.
 - Never start a duplicate run to recover visibility, partial publication or a missing outcome. Start a new request only when a receipt's `retry_policy` says so, after agreeing the change with the operator.

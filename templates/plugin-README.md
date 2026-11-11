@@ -1,21 +1,28 @@
+![AdeptAds](assets/logo.svg)
+
 # ${display_name}
 
 **${headline}**
 
-AdeptAds multi-agent workflows turn your website and brief into Google Ads campaigns, with research, strategy, targeted groups, ad copy and creative assets where supported. Create and expand campaigns, start or pause serving, change daily budgets and bidding, and inspect performance from your agent.
+${opening}
 
-Sign in through AdeptAds OAuth, connect Google, and select the intended account. New campaigns are created paused and start serving only after you confirm. UNIT/CONTENT expansion publishes to Google Ads. Geographic expansion returns a proposal for dashboard approval before publishing. Existing AdeptAds credits and billing apply; Google ad spend is separate. Autopilot setup is outside this package.
+${body}
 
-Source: ${repository}
+### Try it
+
+${prompts}
+
+### Get connected
+
+${install}
+Connect Google in AdeptAds and choose the intended Google Ads account before making changes.
+
+### Your data and control
+
+This package connects your agent to the hosted AdeptAds MCP service at ${mcp_url}. Your requests and relevant account and campaign context are sent to AdeptAds to run the selected tools and workflows against your connected Google Ads account. Authentication uses AdeptAds OAuth; keep credentials out of chat.
 
 AdeptAds emails the account owner about agent-triggered starts, bidding strategy changes, removed limits, large spend-related increases, and changes it could not verify. Alerts do not replace your approval.
 
-Free to install. Campaign workflows use your available AdeptAds credits and plan allowances. Google ad spend is separate.
-
-[Privacy](https://www.adeptads.ai/privacy-policy) · [MIT license](LICENSE)
+[Support](${support_url}) · [Privacy](${privacy_url}) · [Terms](${terms_url}) · [Source](${repository}) · [MIT license](LICENSE)
 
 The license covers this client package. The hosted AdeptAds service remains subject to its own terms and billing.
-
-Installation:
-
-${install}

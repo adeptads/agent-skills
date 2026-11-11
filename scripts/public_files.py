@@ -10,6 +10,7 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_FILES = ("SKILL.md", "references/tools.md", "references/ppc-checks.md", "LICENSE")
 README_TEMPLATE = "templates/plugin-README.md"
+LOGO = "assets/logo.svg"
 SCHEMA_BASE = "https://agent-plugins.org/schemas/1.0.0"
 CLIENTS = {
     "codex": {
@@ -65,6 +66,7 @@ def plugin_files(name, client):
         "LICENSE",
         layout["manifest"],
         layout["mcp"],
+        LOGO,
         *(f"skills/{name}/{p}" for p in SKILL_FILES),
     )
 
@@ -79,7 +81,36 @@ def expected_json(metadata, client):
     server = {"type": layout["transport"], "url": config["mcpUrl"]}
     source = f"./{plugin_dir(name, client)}"
     if client == "codex":
-        manifest = {"$schema": f"{SCHEMA_BASE}/plugin.schema.json", **common}
+        listing = config["listing"]
+        manifest = {
+            "$schema": f"{SCHEMA_BASE}/plugin.schema.json",
+            **common,
+            "homepage": listing["websiteURL"],
+            "extensions": {
+                "com.openai": {
+                    "interface": {
+                        "displayName": config["displayName"],
+                        "developerName": metadata["author"]["name"],
+                        **{
+                            key: listing[key]
+                            for key in (
+                                "shortDescription",
+                                "category",
+                                "capabilities",
+                                "websiteURL",
+                                "supportURL",
+                                "privacyPolicyURL",
+                                "termsOfServiceURL",
+                                "defaultPrompt",
+                            )
+                        },
+                        "longDescription": listing_description(metadata, client),
+                        "logo": f"./{LOGO}",
+                        "composerIcon": f"./{LOGO}",
+                    },
+                },
+            },
+        }
         connection = {
             "$schema": f"{SCHEMA_BASE}/mcp.schema.json",
             "mcpServers": {"adeptads": server},
@@ -99,10 +130,16 @@ def expected_json(metadata, client):
             ],
         }
     else:
+        listing = config["listing"]
         manifest = {
             **common,
             "displayName": config["displayName"],
-            "privacyPolicyUrl": "https://www.adeptads.ai/privacy-policy",
+            "homepage": listing["websiteURL"],
+            "icon": f"./{LOGO}",
+            "documentationUrl": metadata["repository"] + "#readme",
+            "supportUrl": listing["supportURL"],
+            "privacyPolicyUrl": listing["privacyPolicyURL"],
+            "termsOfServiceUrl": listing["termsOfServiceURL"],
         }
         connection = {"mcpServers": {"adeptads": server}}
         catalog = {
@@ -135,18 +172,27 @@ def install_steps(metadata, client):
     )
 
 
+def listing_description(metadata, client):
+    listing = metadata["config"]["listing"]
+    copy = listing["clients"][client]
+    return f"{copy['headline']}\n\n{copy['opening']}\n\n{listing['body']}"
+
+
 def render_readme(root, metadata, client):
     template = Template((Path(root) / README_TEMPLATE).read_text())
+    listing = metadata["config"]["listing"]
     text = template.substitute(
         display_name=metadata["config"]["displayName"],
-        description=metadata["description"],
+        opening=listing["clients"][client]["opening"],
+        body=listing["body"],
+        prompts="\n".join(f'- "{prompt}"' for prompt in listing["defaultPrompt"]),
         repository=metadata["repository"],
         install=install_steps(metadata, client),
-        headline=(
-            "Ship your product. Launch its campaigns."
-            if client == "codex"
-            else "Your next Google Ads campaign starts in Claude."
-        ),
+        headline=listing["clients"][client]["headline"],
+        mcp_url=metadata["config"]["mcpUrl"],
+        support_url=listing["supportURL"],
+        privacy_url=listing["privacyPolicyURL"],
+        terms_url=listing["termsOfServiceURL"],
     )
     return text.rstrip("\n") + "\n"
 
@@ -163,6 +209,67 @@ def validate_mcp_url(value):
         or url.fragment
     ):
         raise ValueError("MCP URL must be a credential-free HTTPS URL ending in /mcp")
+
+
+def validate_listing(metadata, root):
+    config = metadata["config"]
+    listing = config["listing"]
+    url_fields = {"websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"}
+    if set(listing) != url_fields | {
+        "shortDescription",
+        "body",
+        "clients",
+        "category",
+        "capabilities",
+        "defaultPrompt",
+    }:
+        raise ValueError("Unexpected public listing fields")
+    for field, value in {
+        **{key: listing[key] for key in url_fields},
+        "author.url": metadata["author"]["url"],
+    }.items():
+        url = urlsplit(value)
+        if url.scheme != "https" or not url.hostname or url.username or url.password:
+            raise ValueError(
+                f"Public listing {field} must be a credential-free HTTPS URL"
+            )
+        if len(value) > 1024:
+            raise ValueError(f"Public listing {field} exceeds 1024 characters")
+    for value, limit, field in (
+        (config["displayName"], 30, "displayName"),
+        (listing["shortDescription"], 30, "shortDescription"),
+        (metadata["author"]["name"], 80, "developerName"),
+        (metadata["author"]["email"], 320, "author.email"),
+    ):
+        if not isinstance(value, str) or not value.strip() or len(value) > limit:
+            raise ValueError(f"Invalid public listing {field}")
+    if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", metadata["author"]["email"]):
+        raise ValueError("Invalid public author.email")
+    if set(listing["clients"]) != set(CLIENTS):
+        raise ValueError("Public listing copy must cover each client")
+    for client, copy in listing["clients"].items():
+        if set(copy) != {"headline", "opening"} or any(
+            not isinstance(value, str) or not value.strip() for value in copy.values()
+        ):
+            raise ValueError(f"Invalid public listing copy: {client}")
+        if len(listing_description(metadata, client)) > 4000:
+            raise ValueError(f"Public listing longDescription exceeds 4000: {client}")
+    for field, max_items, limit in (
+        ("defaultPrompt", 3, 128),
+        ("capabilities", 20, 120),
+    ):
+        values = listing[field]
+        if (
+            not isinstance(values, list)
+            or len(values) > max_items
+            or any(
+                not isinstance(value, str) or not value.strip() or len(value) > limit
+                for value in values
+            )
+        ):
+            raise ValueError(f"Invalid public listing {field}")
+    if not (root / LOGO).is_file():
+        raise ValueError("Public logo is missing")
 
 
 def validate_skill_frontmatter(root, name):
@@ -203,6 +310,7 @@ def public_files(name):
         "LICENSE",
         "assets/banner.svg",
         "assets/how-it-works.svg",
+        LOGO,
         "package.json",
         README_TEMPLATE,
         "scripts/build.py",
@@ -250,11 +358,17 @@ def read_metadata(root):
         raise ValueError("Invalid public package name or version")
     if metadata["license"] != "MIT":
         raise ValueError("Public package license must be MIT")
-    if set(metadata["config"]) != {"marketplace", "displayName", "mcpUrl"}:
+    if set(metadata["config"]) != {
+        "marketplace",
+        "displayName",
+        "mcpUrl",
+        "listing",
+    }:
         raise ValueError("Unexpected public package configuration fields")
-    if set(metadata["author"]) != {"name"}:
+    if set(metadata["author"]) != {"name", "email", "url"}:
         raise ValueError("Unexpected public author fields")
     validate_mcp_url(metadata["config"]["mcpUrl"])
+    validate_listing(metadata, root)
     return metadata
 
 

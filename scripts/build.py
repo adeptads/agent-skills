@@ -8,6 +8,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from public_files import (
     CLIENTS,
+    LOGO,
     ROOT,
     SKILL_FILES,
     archive_name,
@@ -61,6 +62,8 @@ def build():
     archives = []
     for client in CLIENTS:
         plugin = ROOT / plugin_dir(name, client)
+        (plugin / "assets").mkdir(exist_ok=True)
+        shutil.copyfile(ROOT / LOGO, plugin / LOGO)
         shutil.copyfile(ROOT / "LICENSE", plugin / "LICENSE")
         for relative in SKILL_FILES:
             target = plugin / "skills" / name / relative

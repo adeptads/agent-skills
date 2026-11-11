@@ -7,6 +7,7 @@ from zipfile import ZipFile
 from public_files import (
     ARCHIVE_KINDS,
     CLIENTS,
+    LOGO,
     ROOT,
     SKILL_FILES,
     archive_name,
@@ -62,6 +63,10 @@ def validate(root=ROOT, *, check_archives=True):
             f"Root README install steps drift: {client}",
         )
         plugin = root / plugin_dir(name, client)
+        require(
+            (plugin / LOGO).read_bytes() == (root / LOGO).read_bytes(),
+            f"Generated logo drift: {client}",
+        )
         require(
             (plugin / "LICENSE").read_bytes() == license_text, "Plugin license drift"
         )

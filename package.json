@@ -1,16 +1,48 @@
 {
   "name": "adeptads-google-ads",
-  "version": "0.1.0",
-  "description": "🚀 Give your AI agent Google Ads superpowers. Skills and plugins to create and expand campaigns with AdeptAds multi-agent workflows.",
+  "version": "0.1.1",
+  "description": "Build and grow Google Ads",
   "private": true,
   "repository": "https://github.com/adeptads/agent-skills",
   "author": {
-    "name": "AdeptAds"
+    "name": "AdeptAds",
+    "email": "contact@adeptads.ai",
+    "url": "https://www.adeptads.ai/"
   },
   "config": {
     "marketplace": "adeptads",
     "displayName": "AdeptAds Google Ads",
-    "mcpUrl": "https://api.adeptads.ai/mcp"
+    "mcpUrl": "https://api.adeptads.ai/mcp",
+    "listing": {
+      "shortDescription": "Build and grow Google Ads",
+      "body": "AdeptAds multi-agent workflows research your offer, plan targeted ad groups, write the ads and create images where the campaign needs them. Build Search, Display or Performance Max campaigns in your chosen Google Ads account. New campaigns arrive paused. You look them over and decide when they go live.\n\nAlready running ads? Add groups, keywords, search themes or locations. Check results, pause campaigns, or change budgets and bidding from the same conversation. Additions to a running campaign can go live immediately; new locations wait for your approval in the AdeptAds dashboard.\n\nFree to install. You need an AdeptAds account, connected Google Ads access and available trial or paid-plan credits. Google ad spend is separate. Autopilot setup stays in the AdeptAds dashboard.",
+      "clients": {
+        "codex": {
+          "headline": "Ship your product. Launch its campaigns.",
+          "opening": "Tell your agent what you sell and who should see it. AdeptAds takes care of the campaign build."
+        },
+        "claude": {
+          "headline": "Your next Google Ads campaign starts in Claude.",
+          "opening": "Bring your website, a goal and a budget. Claude works with AdeptAds to turn your brief into a campaign."
+        }
+      },
+      "category": "Productivity",
+      "capabilities": [
+        "Create campaigns",
+        "Expand campaigns",
+        "Inspect performance",
+        "Manage campaign settings"
+      ],
+      "websiteURL": "https://www.adeptads.ai/",
+      "supportURL": "https://www.adeptads.ai/#about-contact",
+      "privacyPolicyURL": "https://www.adeptads.ai/privacy-policy",
+      "termsOfServiceURL": "https://www.adeptads.ai/terms-of-service",
+      "defaultPrompt": [
+        "Build a Search campaign for my website. Help me choose the audience and budget.",
+        "Find useful keywords to add to this campaign. Show me the scope before making changes.",
+        "Show my campaign results for the last 30 days and suggest what to do next."
+      ]
+    }
   },
   "license": "MIT"
 }
