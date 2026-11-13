@@ -1,0 +1,51 @@
+name: Publish AdeptAds to MCP Registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_publish:
+        description: 'Publish the reviewed server.json to the public MCP Registry'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.repository == 'adeptads/agent-skills' && github.ref == 'refs/heads/main' && inputs.confirm_publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      MCP_PUBLISHER_VERSION: v1.8.1
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check listing identity
+        run: |
+          jq -e '.name == "io.github.adeptads/adeptads-google-ads" and .remotes == [{"type":"streamable-http","url":"https://api.adeptads.ai/mcp"}]' server.json
+          jq . server.json
+      - name: Install signature verifier
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6
+      - name: Download and verify publisher
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          archive="mcp-publisher_linux_amd64.tar.gz"
+          gh release download "$MCP_PUBLISHER_VERSION" \
+            --repo modelcontextprotocol/registry \
+            --pattern "$archive" --pattern "$archive.sigstore.json"
+          cosign verify-blob \
+            --bundle "$archive.sigstore.json" \
+            --certificate-identity "https://github.com/modelcontextprotocol/registry/.github/workflows/release.yml@refs/tags/${MCP_PUBLISHER_VERSION}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "$archive"
+          tar xzf "$archive" mcp-publisher
+      - name: Authenticate as the AdeptAds repository
+        run: ./mcp-publisher login github-oidc
+      - name: Publish reviewed listing
+        run: ./mcp-publisher publish

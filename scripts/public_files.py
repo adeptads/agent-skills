@@ -305,6 +305,8 @@ def validate_skill_frontmatter(root, name):
 
 def public_files(name):
     files = {
+        ".github/workflows/publish-mcp.yml",
+        "server.json",
         ".gitignore",
         "README.md",
         "LICENSE",

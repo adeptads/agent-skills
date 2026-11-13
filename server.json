@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.adeptads/adeptads-google-ads",
+  "title": "AdeptAds Google Ads",
+  "description": "Build and grow Google Ads with AdeptAds multi-agent workflows.",
+  "version": "0.1.1",
+  "websiteUrl": "https://github.com/adeptads/agent-skills",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.adeptads.ai/mcp"
+    }
+  ]
+}
