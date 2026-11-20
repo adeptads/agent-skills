@@ -7,6 +7,7 @@ import shutil
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from public_files import (
+    ARCHIVE_KINDS,
     CLIENTS,
     LOGO,
     ROOT,
@@ -44,10 +45,12 @@ def build():
         raise ValueError("Archive output directory must not be a symlink")
     if name != "adeptads-google-ads":
         raise ValueError("Unexpected package name")
-    current = {archive_name(metadata, kind) for kind in (*CLIENTS, "skill")}
+    current = {archive_name(metadata, kind) for kind in ARCHIVE_KINDS}
     owned_archive = re.compile(
         re.escape(name)
-        + r"-(?:codex|claude|skill)-\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?\.zip"
+        + r"-(?:"
+        + "|".join(ARCHIVE_KINDS)
+        + r")-\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?\.zip"
     )
     if dist.exists():
         for path in dist.iterdir():
@@ -62,7 +65,7 @@ def build():
     archives = []
     for client in CLIENTS:
         plugin = ROOT / plugin_dir(name, client)
-        (plugin / "assets").mkdir(exist_ok=True)
+        (plugin / "assets").mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / LOGO, plugin / LOGO)
         shutil.copyfile(ROOT / "LICENSE", plugin / "LICENSE")
         for relative in SKILL_FILES:

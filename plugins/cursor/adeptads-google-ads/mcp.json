@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "adeptads": {
+      "url": "https://api.adeptads.ai/mcp"
+    }
+  }
+}

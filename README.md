@@ -53,6 +53,12 @@ codex plugin add adeptads-google-ads@adeptads
 
 Start a new session and complete AdeptAds OAuth sign-in when prompted.
 
+### Cursor
+
+The Cursor plugin is in [plugins/cursor/adeptads-google-ads](plugins/cursor/adeptads-google-ads). You can use Cursor’s **Import from Disk** with this folder.
+
+Install the plugin in Cursor. Sign in to AdeptAds when prompted, connect Google Ads, and choose the account you want to use.
+
 ### Any other agent
 
 ```sh
@@ -112,10 +118,11 @@ While the conversation is open, yes: the agent checks progress and reports each 
 | Standalone skill | `skills/adeptads-google-ads/` | Instructions and tool reference; connect MCP separately |
 | Codex plugin | `plugins/codex/adeptads-google-ads/` | The skill and a hosted MCP connection |
 | Claude plugin | `plugins/claude/adeptads-google-ads/` | The skill and a hosted MCP connection |
+| Cursor plugin | `plugins/cursor/adeptads-google-ads/` | The skill and a hosted MCP connection |
 
 The MCP server and campaign workflows run in the AdeptAds backend. This repository contains client packages, not the server implementation or credentials.
 
-Maintain the skill in `skills/`, metadata in `package.json`, and the plugin README in `templates/plugin-README.md`. Verify PPC advice against its sources when changing it. Generate both plugin bundles and ZIP archives with:
+Maintain the skill in `skills/`, metadata in `package.json`, and plugin READMEs in `templates/`. Verify PPC advice against its sources when changing it. Generate the plugin bundles and ZIP archives with:
 
 ```sh
 python3 scripts/build.py

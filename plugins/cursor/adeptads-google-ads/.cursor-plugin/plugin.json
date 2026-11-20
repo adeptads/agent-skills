@@ -1,0 +1,20 @@
+{
+  "name": "adeptads-google-ads",
+  "version": "0.1.1",
+  "description": "Build and grow Google Ads campaigns from your website, right in Cursor.",
+  "author": {
+    "name": "AdeptAds",
+    "email": "contact@adeptads.ai"
+  },
+  "repository": "https://github.com/adeptads/agent-skills",
+  "license": "MIT",
+  "displayName": "AdeptAds Google Ads",
+  "homepage": "https://www.adeptads.ai/",
+  "keywords": [
+    "google-ads",
+    "advertising",
+    "ppc",
+    "campaigns"
+  ],
+  "logo": "assets/logo.svg"
+}

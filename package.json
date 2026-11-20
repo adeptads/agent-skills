@@ -24,6 +24,11 @@
         "claude": {
           "headline": "Your next Google Ads campaign starts in Claude.",
           "opening": "Bring your website, a goal and a budget. Claude works with AdeptAds to turn your brief into a campaign."
+        },
+        "cursor": {
+          "headline": "Build and grow Google Ads campaigns from your website, right in Cursor.",
+          "opening": "Give Cursor your website, audience, and daily budget. AdeptAds researches keywords, organizes ad groups, and writes ads for Search, Display, or Performance Max campaigns in your Google Ads account.",
+          "body": "Already running ads? Ask Cursor which campaigns drove conversions in the last 30 days, then expand one with new keywords, ad groups, or locations.\n\nFree to install. Running a workflow requires an AdeptAds account with trial or paid credits and a connected Google Ads account. Google bills ad spend separately."
         }
       },
       "category": "Productivity",

@@ -1,0 +1,13 @@
+{
+  "name": "adeptads",
+  "owner": {
+    "name": "AdeptAds",
+    "email": "contact@adeptads.ai"
+  },
+  "plugins": [
+    {
+      "name": "adeptads-google-ads",
+      "source": "./plugins/cursor/adeptads-google-ads"
+    }
+  ]
+}

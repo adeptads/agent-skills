@@ -10,6 +10,7 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_FILES = ("SKILL.md", "references/tools.md", "references/ppc-checks.md", "LICENSE")
 README_TEMPLATE = "templates/plugin-README.md"
+CURSOR_README_TEMPLATE = "templates/cursor-README.md"
 LOGO = "assets/logo.svg"
 SCHEMA_BASE = "https://agent-plugins.org/schemas/1.0.0"
 CLIENTS = {
@@ -24,6 +25,11 @@ CLIENTS = {
         "mcp": ".mcp.json",
         "catalog": ".claude-plugin/marketplace.json",
         "transport": "http",
+    },
+    "cursor": {
+        "manifest": ".cursor-plugin/plugin.json",
+        "mcp": "mcp.json",
+        "catalog": ".cursor-plugin/marketplace.json",
     },
 }
 ARCHIVE_KINDS = (*CLIENTS, "skill")
@@ -78,7 +84,9 @@ def expected_json(metadata, client):
         key: metadata[key]
         for key in ("name", "version", "description", "author", "repository", "license")
     }
-    server = {"type": layout["transport"], "url": config["mcpUrl"]}
+    server = {"url": config["mcpUrl"]}
+    if "transport" in layout:
+        server = {"type": layout["transport"], **server}
     source = f"./{plugin_dir(name, client)}"
     if client == "codex":
         listing = config["listing"]
@@ -129,6 +137,23 @@ def expected_json(metadata, client):
                 }
             ],
         }
+    elif client == "cursor":
+        author = {key: metadata["author"][key] for key in ("name", "email")}
+        manifest = {
+            **common,
+            "displayName": config["displayName"],
+            "description": config["listing"]["clients"][client]["headline"],
+            "author": author,
+            "homepage": config["listing"]["websiteURL"],
+            "keywords": ["google-ads", "advertising", "ppc", "campaigns"],
+            "logo": LOGO,
+        }
+        connection = {"mcpServers": {"adeptads": server}}
+        catalog = {
+            "name": config["marketplace"],
+            "owner": author,
+            "plugins": [{"name": name, "source": source}],
+        }
     else:
         listing = config["listing"]
         manifest = {
@@ -157,6 +182,11 @@ def expected_json(metadata, client):
 
 
 def install_steps(metadata, client):
+    if client == "cursor":
+        return (
+            "Install the plugin in Cursor. Sign in to AdeptAds when prompted, "
+            "connect Google Ads, and choose the account you want to use.\n"
+        )
     repo = metadata["repository"].removeprefix("https://github.com/")
     marketplace = metadata["config"]["marketplace"]
     if client == "claude":
@@ -175,20 +205,23 @@ def install_steps(metadata, client):
 def listing_description(metadata, client):
     listing = metadata["config"]["listing"]
     copy = listing["clients"][client]
-    return f"{copy['headline']}\n\n{copy['opening']}\n\n{listing['body']}"
+    body = copy.get("body", listing["body"])
+    return f"{copy['headline']}\n\n{copy['opening']}\n\n{body}"
 
 
 def render_readme(root, metadata, client):
-    template = Template((Path(root) / README_TEMPLATE).read_text())
+    template_path = CURSOR_README_TEMPLATE if client == "cursor" else README_TEMPLATE
+    template = Template((Path(root) / template_path).read_text())
     listing = metadata["config"]["listing"]
+    copy = listing["clients"][client]
     text = template.substitute(
         display_name=metadata["config"]["displayName"],
-        opening=listing["clients"][client]["opening"],
-        body=listing["body"],
+        opening=copy["opening"],
+        body=copy.get("body", listing["body"]),
         prompts="\n".join(f'- "{prompt}"' for prompt in listing["defaultPrompt"]),
         repository=metadata["repository"],
         install=install_steps(metadata, client),
-        headline=listing["clients"][client]["headline"],
+        headline=copy["headline"],
         mcp_url=metadata["config"]["mcpUrl"],
         support_url=listing["supportURL"],
         privacy_url=listing["privacyPolicyURL"],
@@ -248,7 +281,12 @@ def validate_listing(metadata, root):
     if set(listing["clients"]) != set(CLIENTS):
         raise ValueError("Public listing copy must cover each client")
     for client, copy in listing["clients"].items():
-        if set(copy) != {"headline", "opening"} or any(
+        keys = (
+            {"headline", "opening", "body"}
+            if client == "cursor"
+            else {"headline", "opening"}
+        )
+        if set(copy) != keys or any(
             not isinstance(value, str) or not value.strip() for value in copy.values()
         ):
             raise ValueError(f"Invalid public listing copy: {client}")
@@ -315,6 +353,7 @@ def public_files(name):
         LOGO,
         "package.json",
         README_TEMPLATE,
+        CURSOR_README_TEMPLATE,
         "scripts/build.py",
         "scripts/export.py",
         "scripts/public_files.py",
